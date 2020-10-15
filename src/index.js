@@ -2,25 +2,41 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 // 样式导入
 import './learn.css'
-let time = new Date().toLocaleTimeString();
-let str = '时间：';
+
 let styleDom = {
   background: "red"
 }
-let styleDom2 = ['borders','h1bg'].join(" ")
+class Clock extends React.Component{
+  constructor(props) {
+    super(props)
+    // 状态数据 数据决定view视图
+    this.state = {
+      time : new Date().toLocaleTimeString()
+    }
+  }
+  
+  render() {
+    return(
+      
+      <div>
+        <h1>当前的时间是{this.state.time}</h1>
+      </div>
+    )
+  }
+  // 生命周期函数 
+  // 组件渲染完成时的函数 
+  componentDidMount() {
+    setInterval(() => {
+      this.setState({
+        time : new Date().toLocaleTimeString()
+      })
+    }, 1000);
+  }
+}
 
 let el = (
   <div style={styleDom}>
-    你好世界
-    <h1 className="borders">
-      {str+time}
-    </h1>
-    {/*  */}
-    {/* 这是注释 */}
-    <h1 className={styleDom2}>
-      {str+time}
-    </h1>
-    
+    <Clock />
   </div>
 )
 ReactDOM.render(
