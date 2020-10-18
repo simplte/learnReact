@@ -190,3 +190,105 @@ let el = (
 ```
 
 #### 状态管理
+1：声明组件状态
+```
+在class中的constructor构造方法中声明需要的变量：
+constructor(props) {
+    super(props)
+    // 状态数据 数据决定view视图
+    this.state = {
+      time : new Date().toLocaleTimeString(),
+      showInfo: '',
+      type: false
+    }
+  }
+```
+2：改变状态
+
+```
+通过 this.setState()方法改变需要的变量
+tips：
+绑定在视图中的方法会因为this指向原因报出找不到对应state中变量值得错误，
+解决方法：
+1：就是在声明视图中绑定的方法时使用箭头函数定义方法，这样就能解决this指向问题
+changeShowInfo = ()=> {
+    let {type} = this.state;
+      this.setState({
+        showInfo:type? '我叫卜前程' : '猜猜是是谁',
+        type: !type
+      })
+  }
+2：在constructor构造函数中 通过bind方法改变一下绑定视图中方法的作用域
+constructor(props) {
+    super(props)
+    // 状态数据 数据决定view视图
+    this.state = {
+      time : new Date().toLocaleTimeString(),
+      showInfo: '',
+      type: false
+    }
+    this.changeShowInfo = this.changeShowInfo.bind(this)
+  }
+  
+  小提示：
+react中视图绑定需要执行的方式和小程序类似：
+通过onClick 方法绑定需要执行的方法 记得加this
+<button onClick={this.changeShowInfo}>
+  切换视图状态
+</button>
+```
+#### 父子组件间的数据传值及修改
+1:父组件传值给子组件
+```
+父组件：
+1：定义子组件接受的参数属性名(fatherStr,changeFatherData),将父组件的属性或者方法等传给子组件
+render() {
+    return(
+      
+      <div>
+        <ChildComp fatherStr={this.state.showInfo} changeFatherData={this.changeShowInfo}/>
+      </div>
+    )
+子组件：
+1：在构造函数中通过super接受父组件的传值
+2：通过this.props.xxx 取到父组件穿过来的属性或者方法等
+
+constructor(props) {
+    super(props);
+    console.log(props)
+    this.state = {
+      childStr: '子组件中的数据',
+    }
+  }
+   render() {
+    return (
+      <div style={childComStyle}>
+        我是一个子组件
+        <p>{this.state.childStr}</p>
+        <p>父组件传过来的值：{this.props.fatherStr}</p>
+        <button onClick={this.changeFatherData}>改变父元素的值</button>
+      </div>
+    )
+  } 
+  changeFatherData= ()=> {
+    this.props.changeFatherData();
+  }
+```
+2：修改父组件中的属性值
+
+通过调用父组件穿过来的方法修改对应的父组件的属性值，这点小程序及vue通过 emit的方式不同
+
+#### 方法的绑定及传值
+1：方法绑定通过 在需要绑定事件的dom中  添加onClick属性
+2：给方法传值的方式和小程序和vue都不同
+-  传入dom的原生方法和属性给对应函数 将e传入
+-  传入需要传入的值  通过在onClick中传入箭头函数在箭头函数中执行需要执行的方法将对应参数传入
+3：阻止默认行为的方法为
+
+    使用传入的dom原生方法对象e中的preventDefault
+    e.preventDefault();
+```
+<button  onClick={(e)=>{this.changeShowInfo('方法传的值',e)}}>
+  切换视图状态
+</button>
+```
