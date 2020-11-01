@@ -48,32 +48,6 @@ class GrilsComponDT extends React.Component {
     alert(`大爷点了${_data.name},使用${_data.skill}服务`);
   }
 }
-class SearchRes extends React.Component {
-	constructor(props) {
-		super(props);
-		console.log(props)
-		this.state = {
-			inputVal: ''
-		}
-	}
-	render() {
-		return (
-			<div>
-				<input type="text" onKeyDown={this.keyDown} value={this.state.inputVal} onChange={this.valChange}/>
-			</div>
-		)
-	}
-	keyDown=(e) =>{
-		if(e.keyCode == 13) {
-			this.props.searchFun(this.state.inputVal)
-		}
-	}
-	valChange=(e)=> {
-		this.setState({
-			inputVal: e.target.value
-		})
-	}
-}
 class Clock extends React.Component {
 	constructor(props) {
 		super(props);
@@ -98,8 +72,7 @@ class Clock extends React.Component {
 					name: '阿荣',
 					skill: '日式'
 				}
-			],
-			searchVal: ''
+			]
 		};
 	}
 
@@ -133,22 +106,12 @@ class Clock extends React.Component {
             return <GrilsComponDT data={x} key={i}></GrilsComponDT>
           })
         }
-		{
-			<div>
-				<SearchRes searchFun={(e)=>{this.changeVal(e)}}/>
-				<div>搜索结果：{this.state.searchVal}</div>
-			</div>
-		}
 			</div>
 		);
 	}
 	// 生命周期函数
 	// 组件渲染完成时的函数
-	
-	componentDidMount() {
-		console.log('组件渲染完成')
-	}
-	
+	componentDidMount() {}
 	changeShowInfo = (str, e) => {
 		// 默认行为阻止
 		e.preventDefault();
@@ -162,18 +125,6 @@ class Clock extends React.Component {
 	};
 	seGirls(_info, event) {
 		alert(`大爷点了${_info.name},使用${_info.skill}服务`);
-	}
-	changeVal=(_val)=> {
-		// searchVal:
-		console.log(_val)
-		let _findItem = this.state.girlArr.find(x => x.name == _val)
-		if(!_findItem) {
-			alert(`没有名字叫${_val}的小姐姐`);
-			return;
-		}
-		this.setState({
-			searchVal: `大爷选择了${_findItem.name},进行${_findItem.skill}服务`
-		})
 	}
 }
 
